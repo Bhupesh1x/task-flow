@@ -1,7 +1,11 @@
+"use client";
+
+import SignInCard from "@/features/auth/components/SignInCard";
+
 const SignInPage = () => {
   return (
-    <div>
-      <h1>SignIn Page</h1>
+    <div className="h-full w-full">
+      <SignInCard />
     </div>
   );
 };
