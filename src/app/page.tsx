@@ -1,10 +1,9 @@
-import { Button } from "@/components/ui/button";
+import UserButton from "@/features/auth/components/UserButton";
 
 export default function Home() {
   return (
     <div>
-      <h1 className="text-red-400">Hello world</h1>
-      <Button>Click Me!</Button>
+      <UserButton />
     </div>
   );
 }
