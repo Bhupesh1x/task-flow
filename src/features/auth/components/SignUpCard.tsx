@@ -25,28 +25,23 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { DottedSeprator } from "@/components/DottedSeprator";
 
-const formSchema = z.object({
-  name: z.string().trim().min(1, "Required"),
-  email: z.string().email(),
-  password: z
-    .string()
-    .trim()
-    .min(8, "Minimum 8 characters are required")
-    .max(256, "Maximum 256 characters are allowed"),
-});
+import { registerSchema } from "../schemas";
+import { useRegister } from "../api/useRegister";
 
 export default function SignUpCard() {
-  const form = useForm<z.infer<typeof formSchema>>({
+  const { mutate } = useRegister();
+
+  const form = useForm<z.infer<typeof registerSchema>>({
     defaultValues: {
       name: "",
       email: "",
       password: "",
     },
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(registerSchema),
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log({ values });
+  function onSubmit(values: z.infer<typeof registerSchema>) {
+    mutate(values);
   }
 
   return (

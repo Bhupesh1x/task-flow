@@ -17,26 +17,21 @@ import { Button } from "@/components/ui/button";
 import { DottedSeprator } from "@/components/DottedSeprator";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-const formSchema = z.object({
-  email: z.string().email(),
-  password: z
-    .string()
-    .trim()
-    .min(1, "Required")
-    .max(256, "Maximum 256 characters are allowed"),
-});
+import { loginSchema } from "../schemas";
+import { useLogin } from "../api/useLogin";
 
 export default function SignInCard() {
-  const form = useForm<z.infer<typeof formSchema>>({
+  const { mutate } = useLogin();
+  const form = useForm<z.infer<typeof loginSchema>>({
     defaultValues: {
       email: "",
       password: "",
     },
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(loginSchema),
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log({ values });
+  function onSubmit(values: z.infer<typeof loginSchema>) {
+    mutate(values);
   }
 
   return (
