@@ -14,7 +14,7 @@ import {
 import { DottedSeprator } from "@/components/DottedSeprator";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
-export default function UserButton() {
+export function UserButton() {
   const { mutate } = useLogout();
   const { data: user, isLoading } = useCurrent();
 
