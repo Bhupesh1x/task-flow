@@ -28,8 +28,8 @@ import { DottedSeprator } from "@/components/DottedSeprator";
 import { registerSchema } from "../schemas";
 import { useRegister } from "../api/useRegister";
 
-export default function SignUpCard() {
-  const { mutate } = useRegister();
+export function SignUpCard() {
+  const { mutate, isPending } = useRegister();
 
   const form = useForm<z.infer<typeof registerSchema>>({
     defaultValues: {
@@ -113,7 +113,7 @@ export default function SignUpCard() {
               )}
             />
 
-            <Button disabled={false} className="w-full" size="lg">
+            <Button disabled={isPending} className="w-full" size="lg">
               Sign up
             </Button>
           </form>
@@ -126,7 +126,7 @@ export default function SignUpCard() {
 
       <CardContent className="p-7 space-y-4">
         <Button
-          disabled={false}
+          disabled={isPending}
           size="lg"
           variant="secondary"
           className="w-full"
@@ -135,7 +135,7 @@ export default function SignUpCard() {
           Sign up with google
         </Button>
         <Button
-          disabled={false}
+          disabled={isPending}
           size="lg"
           variant="secondary"
           className="w-full"

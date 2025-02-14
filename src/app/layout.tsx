@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
+import { Toaster } from "sonner";
+
 import "./globals.css";
 
 import { QueryProvider } from "@/components/QueryProvider";
@@ -21,6 +23,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter} antialiased min-h-screen`}>
         <QueryProvider>{children}</QueryProvider>
+        <Toaster />
       </body>
     </html>
   );
