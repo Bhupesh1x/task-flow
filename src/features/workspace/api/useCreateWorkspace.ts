@@ -17,7 +17,7 @@ export function useCreateWorkspace() {
       const response = await client.api.workspaces["$post"]({ json });
 
       if (!response.ok) {
-        throw new Error("Error creating workspace.");
+        throw new Error("Failed to create workspace.");
       }
 
       return await response.json();
@@ -26,6 +26,7 @@ export function useCreateWorkspace() {
       toast.error(error?.message || "Internal server error");
     },
     onSuccess: async () => {
+      toast.success("Workspace created");
       await queryClient.invalidateQueries({ queryKey: ["workspaces"] });
     },
   });
