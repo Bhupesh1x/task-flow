@@ -19,6 +19,7 @@ export function useLogout() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["current"] });
       router.refresh();
+      router.replace("/sign-in");
       window.location.reload();
     },
   });
