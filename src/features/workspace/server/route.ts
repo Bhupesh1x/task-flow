@@ -8,6 +8,7 @@ import {
   WORKSPACES_ID,
   IMAGES_BUCKET_ID,
 } from "@/config";
+import { generateInviteCode } from "@/lib/utils";
 import { sessionMiddleware } from "@/lib/sessionMiddleware";
 
 import { MemberRole } from "@/features/member/types";
@@ -77,6 +78,7 @@ const app = new Hono()
           name,
           userId: user.$id,
           image: uploadedImageUrl,
+          inviteCode: generateInviteCode(6),
         }
       );
 
