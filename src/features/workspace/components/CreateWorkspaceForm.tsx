@@ -45,18 +45,14 @@ export const CreateWorkspaceForm = ({ onCancel }: Props) => {
       ...values,
       image: values.image instanceof File ? values.image : "",
     };
-    mutate(finalValues, {
-      onSuccess: () => {
-        form.reset();
-      },
-    });
+
+    mutate(finalValues);
   }
 
   function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
 
     if (file) {
-      console.log(URL.createObjectURL(file));
       form.setValue("image", file);
     }
   }

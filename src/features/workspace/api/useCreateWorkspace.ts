@@ -1,4 +1,5 @@
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 import { InferRequestType, InferResponseType } from "hono";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -10,6 +11,7 @@ type RequestType = InferRequestType<
 >["form"];
 
 export function useCreateWorkspace() {
+  const router = useRouter();
   const queryClient = useQueryClient();
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
@@ -25,9 +27,10 @@ export function useCreateWorkspace() {
     onError: (error: Error) => {
       toast.error(error?.message || "Internal server error");
     },
-    onSuccess: async () => {
+    onSuccess: async ({ data }) => {
       toast.success("Workspace created");
       await queryClient.invalidateQueries({ queryKey: ["workspaces"] });
+      router.push(`/workspaces/${data.$id}`);
     },
   });
 
