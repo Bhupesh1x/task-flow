@@ -2,11 +2,14 @@
 
 import { z } from "zod";
 import Image from "next/image";
+import { toast } from "sonner";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, ImageIcon } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ArrowLeft, Copy, ImageIcon } from "lucide-react";
+
+import { useConfirm } from "@/hooks/useConfirm";
 
 import {
   Form,
@@ -22,11 +25,12 @@ import { DottedSeprator } from "@/components/DottedSeprator";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
+import { useUpdateWorkspace } from "../api/useUpdateWorkspace";
+import { useDeleteWorkspace } from "../api/useDeleteWorkspace";
+import { useResetInviteCode } from "../api/useResetInviteCode";
+
 import { WorkspaceType } from "../types";
 import { updateWorkspaceSchema } from "../schema";
-import { useUpdateWorkspace } from "../api/useUpdateWorkspace";
-import { useConfirm } from "@/hooks/useConfirm";
-import { useDeleteWorkspace } from "../api/useDeleteWorkspace";
 
 type Props = {
   onCancel?: () => void;
@@ -50,9 +54,18 @@ export const UpdateWorkspaceForm = ({ onCancel, initialValues }: Props) => {
     "destructive"
   );
 
+  const [ResetDialog, confirmResetInviteCode] = useConfirm(
+    "Reset invite link",
+    "This will invalidate the current invite link",
+    "destructive"
+  );
+
   const { mutate, isPending } = useUpdateWorkspace();
   const { mutate: deleteWorkspace, isPending: isDeletePending } =
     useDeleteWorkspace();
+
+  const { mutate: reserInviteCode, isPending: isResetCodePending } =
+    useResetInviteCode();
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -96,9 +109,30 @@ export const UpdateWorkspaceForm = ({ onCancel, initialValues }: Props) => {
     );
   }
 
+  const fullInviteLink = `${window.location.origin}/workspaces/${initialValues.$id}/join/${initialValues.inviteCode}`;
+
+  function onCopy() {
+    navigator.clipboard.writeText(fullInviteLink).then(() => {
+      toast.success("Copied invite link to the clipboard");
+    });
+  }
+
+  async function onResetInviteLink() {
+    const ok = await confirmResetInviteCode();
+
+    if (!ok) return null;
+
+    reserInviteCode({
+      param: {
+        workspaceId: initialValues.$id,
+      },
+    });
+  }
+
   return (
     <div className="flex flex-col gap-y-4">
       <DeleteDialog />
+      <ResetDialog />
       <Card className="h-full w-full border-none shadow-none">
         <CardHeader className="flex flex-row p-7 items-center gap-2 space-y-0">
           <Button
@@ -239,12 +273,40 @@ export const UpdateWorkspaceForm = ({ onCancel, initialValues }: Props) => {
 
       <Card className="h-full w-full border-none shadow-none">
         <CardHeader>
+          <CardTitle className="text-xl font-bold">Invite Members</CardTitle>
+          <p className="text-sm text-muted-foreground">
+            Use the invite link to add members to your workspace
+          </p>
+          <div className="flex items-center justify-between gap-3">
+            <Input disabled readOnly value={fullInviteLink} />
+            <Button variant="secondary" className="size-12" onClick={onCopy}>
+              <Copy className="size-5" />
+            </Button>
+          </div>
+        </CardHeader>
+        <DottedSeprator className="py-2" />
+
+        <CardContent>
+          <Button
+            disabled={isPending || isResetCodePending}
+            onClick={onResetInviteLink}
+            variant="destructive"
+            className="flex ml-auto mt-2"
+          >
+            Reset invite link
+          </Button>
+        </CardContent>
+      </Card>
+
+      <Card className="h-full w-full border-none shadow-none">
+        <CardHeader>
           <CardTitle className="text-xl font-bold">Danger Zone</CardTitle>
           <p className="text-sm text-muted-foreground">
             Deleting a workspace is an irreversible action and will remove all
             associated data
           </p>
         </CardHeader>
+        <DottedSeprator className="py-2" />
         <CardContent>
           <Button
             disabled={isPending || isDeletePending}
