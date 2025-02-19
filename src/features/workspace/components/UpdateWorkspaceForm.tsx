@@ -3,8 +3,9 @@
 import { z } from "zod";
 import Image from "next/image";
 import { useRef } from "react";
-import { ImageIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { ArrowLeft, ImageIcon } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
@@ -31,6 +32,7 @@ type Props = {
 };
 
 export const UpdateWorkspaceForm = ({ onCancel, initialValues }: Props) => {
+  const router = useRouter();
   const form = useForm<z.infer<typeof updateWorkspaceSchema>>({
     resolver: zodResolver(updateWorkspaceSchema),
     defaultValues: {
@@ -66,7 +68,19 @@ export const UpdateWorkspaceForm = ({ onCancel, initialValues }: Props) => {
 
   return (
     <Card className="h-full w-full border-none shadow-none">
-      <CardHeader className="flex p-7">
+      <CardHeader className="flex flex-row p-7 items-center gap-2 space-y-0">
+        <Button
+          size="sm"
+          variant="secondary"
+          onClick={
+            onCancel
+              ? onCancel
+              : () => router.push(`/workspaces/${initialValues.$id}`)
+          }
+        >
+          <ArrowLeft className="size-5" />
+          Back
+        </Button>
         <CardTitle className="text-xl font-bold">
           {initialValues?.name}
         </CardTitle>
@@ -124,16 +138,34 @@ export const UpdateWorkspaceForm = ({ onCancel, initialValues }: Props) => {
                       <p className="text-sm text-muted-foreground">
                         JPG, PNG, SVG or JPEG, max 1mb
                       </p>
-                      <Button
-                        type="button"
-                        variant="teritary"
-                        className="mt-2 w-fit"
-                        size="sm"
-                        disabled={isPending}
-                        onClick={handleImageUploadClick}
-                      >
-                        Upload
-                      </Button>
+                      {field.value ? (
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          className="mt-2 w-fit"
+                          size="sm"
+                          disabled={isPending}
+                          onClick={() => {
+                            field.onChange("");
+                            if (inputRef.current) {
+                              inputRef.current.value = "";
+                            }
+                          }}
+                        >
+                          Remove Image
+                        </Button>
+                      ) : (
+                        <Button
+                          type="button"
+                          variant="teritary"
+                          className="mt-2 w-fit"
+                          size="sm"
+                          disabled={isPending}
+                          onClick={handleImageUploadClick}
+                        >
+                          Upload Image
+                        </Button>
+                      )}
                       <input
                         type="file"
                         accept=".jpg, .png, .svg, .jpeg"
@@ -161,7 +193,7 @@ export const UpdateWorkspaceForm = ({ onCancel, initialValues }: Props) => {
                 Cancel
               </Button>
               <Button onClick={onCancel} disabled={isPending} size="lg">
-                Create
+                Update Workspace
               </Button>
             </div>
           </form>

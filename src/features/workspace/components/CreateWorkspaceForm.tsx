@@ -121,16 +121,34 @@ export const CreateWorkspaceForm = ({ onCancel }: Props) => {
                       <p className="text-sm text-muted-foreground">
                         JPG, PNG, SVG or JPEG, max 1mb
                       </p>
-                      <Button
-                        type="button"
-                        variant="teritary"
-                        className="mt-2 w-fit"
-                        size="sm"
-                        disabled={isPending}
-                        onClick={handleImageUploadClick}
-                      >
-                        Upload
-                      </Button>
+                      {field.value ? (
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          className="mt-2 w-fit"
+                          size="sm"
+                          disabled={isPending}
+                          onClick={() => {
+                            field.onChange("");
+                            if (inputRef.current) {
+                              inputRef.current.value = "";
+                            }
+                          }}
+                        >
+                          Remove Image
+                        </Button>
+                      ) : (
+                        <Button
+                          type="button"
+                          variant="teritary"
+                          className="mt-2 w-fit"
+                          size="sm"
+                          disabled={isPending}
+                          onClick={handleImageUploadClick}
+                        >
+                          Upload Image
+                        </Button>
+                      )}
                       <input
                         type="file"
                         accept=".jpg, .png, .svg, .jpeg"
@@ -158,7 +176,7 @@ export const CreateWorkspaceForm = ({ onCancel }: Props) => {
                 Cancel
               </Button>
               <Button onClick={onCancel} disabled={isPending} size="lg">
-                Create
+                Create Workspace
               </Button>
             </div>
           </form>

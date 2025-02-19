@@ -12,7 +12,7 @@ export const WorkspaceAvatar = ({ name, image, className }: Props) => {
   if (image) {
     return (
       <div
-        className={`relative size-10 rounded-md overflow-hidden ${className}`}
+        className={`relative size-10 rounded-md overflow-hidden ${className} flex-shrink-0`}
       >
         <Image src={image} alt={name} fill className="object-cover" />
       </div>

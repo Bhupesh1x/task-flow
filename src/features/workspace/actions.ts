@@ -3,6 +3,8 @@ import { Account, Client, Databases, Query } from "node-appwrite";
 
 import { DATABASE_ID, MEMBERS_ID, WORKSPACES_ID } from "@/config";
 
+import { WorkspaceType } from "./types";
+import { getMember } from "../member/utils";
 import { AUTH_COOKIE } from "../auth/constants";
 
 export async function getWorkspaces() {
@@ -45,5 +47,50 @@ export async function getWorkspaces() {
     return workspaces;
   } catch {
     return { documents: [], total: 0 };
+  }
+}
+
+type GetWorkspaceProp = {
+  workspaceId: string;
+};
+
+export async function getWorkspace({ workspaceId }: GetWorkspaceProp) {
+  try {
+    const client = new Client()
+      .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
+      .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT!);
+
+    const session = cookies().get(AUTH_COOKIE);
+
+    if (!session) {
+      return null;
+    }
+
+    client.setSession(session.value);
+
+    const account = new Account(client);
+    const database = new Databases(client);
+
+    const user = await account.get();
+
+    const member = getMember({
+      databases: database,
+      userId: user.$id,
+      workspaceId,
+    });
+
+    if (!member) {
+      return null;
+    }
+
+    const workspace = await database.getDocument<WorkspaceType>(
+      DATABASE_ID,
+      WORKSPACES_ID,
+      workspaceId
+    );
+
+    return workspace;
+  } catch {
+    return null;
   }
 }
