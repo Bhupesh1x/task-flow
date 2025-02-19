@@ -1,4 +1,5 @@
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 import { InferRequestType, InferResponseType } from "hono";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -14,6 +15,7 @@ type RequestType = InferRequestType<
 
 export function useJoinWorkspace() {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
     mutationFn: async ({ param, json }) => {
@@ -34,9 +36,10 @@ export function useJoinWorkspace() {
       toast.error(error?.message || "Internal server error");
     },
     onSuccess: async ({ data }) => {
-      toast.success("Joined workspace");
+      toast.success("Workspace joined");
       queryClient.invalidateQueries({ queryKey: ["wokspaces"] });
       queryClient.invalidateQueries({ queryKey: ["wokspace", data.$id] });
+      router.push(`/workspaces/${data.$id}`);
     },
   });
 
