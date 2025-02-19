@@ -113,7 +113,7 @@ const app = new Hono()
       });
 
       if (!member || member.role !== MemberRole.ADMIN) {
-        c.json({ error: "Unauthorized" }, 401);
+        return c.json({ error: "Unauthorized" }, 401);
       }
 
       let uploadedImageUrl;
@@ -161,8 +161,10 @@ const app = new Hono()
       userId: user.$id,
     });
 
+    console.log("member", member);
+
     if (!member || member.role !== MemberRole.ADMIN) {
-      c.json({ error: "Unauthorized" }, 401);
+      return c.json({ error: "Unauthorized" }, 401);
     }
 
     const workspace = await databases.deleteDocument(
@@ -185,7 +187,7 @@ const app = new Hono()
     });
 
     if (!member || member.role !== MemberRole.ADMIN) {
-      c.json({ error: "Unauthorized" }, 401);
+      return c.json({ error: "Unauthorized" }, 401);
     }
 
     const workspace = await databases.updateDocument(
@@ -217,18 +219,17 @@ const app = new Hono()
       });
 
       if (member) {
-        c.json({ error: "Already a member" }, 400);
+        return c.json({ error: "Already a member" }, 400);
       }
 
       const workspace = await databases.getDocument(
         DATABASE_ID,
         WORKSPACES_ID,
-        workspaceId,
-        [Query.equal("$id", workspaceId)]
+        workspaceId
       );
 
       if (workspace.inviteCode !== code) {
-        c.json({ error: "Invalid code" }, 400);
+        return c.json({ error: "Invalid code" }, 400);
       }
 
       await databases.createDocument(DATABASE_ID, MEMBERS_ID, ID.unique(), {
