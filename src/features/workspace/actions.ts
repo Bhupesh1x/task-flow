@@ -1,32 +1,18 @@
-import { cookies } from "next/headers";
-import { Account, Client, Databases, Query } from "node-appwrite";
+import { Query } from "node-appwrite";
 
+import { createSessionClient } from "@/lib/appwrite";
 import { DATABASE_ID, MEMBERS_ID, WORKSPACES_ID } from "@/config";
 
 import { WorkspaceType } from "./types";
 import { getMember } from "../member/utils";
-import { AUTH_COOKIE } from "../auth/constants";
 
 export async function getWorkspaces() {
   try {
-    const client = new Client()
-      .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
-      .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT!);
-
-    const session = cookies().get(AUTH_COOKIE);
-
-    if (!session) {
-      return { documents: [], total: 0 };
-    }
-
-    client.setSession(session.value);
-
-    const account = new Account(client);
-    const database = new Databases(client);
+    const { account, databases } = await createSessionClient();
 
     const user = await account.get();
 
-    const members = await database.listDocuments(DATABASE_ID, MEMBERS_ID, [
+    const members = await databases.listDocuments(DATABASE_ID, MEMBERS_ID, [
       Query.equal("userId", user.$id),
     ]);
 
@@ -38,7 +24,7 @@ export async function getWorkspaces() {
       (member) => member.workspaceId
     );
 
-    const workspaces = await database.listDocuments(
+    const workspaces = await databases.listDocuments(
       DATABASE_ID,
       WORKSPACES_ID,
       [Query.orderDesc("$createdAt"), Query.contains("$id", workspaceIds)]
@@ -56,25 +42,12 @@ type GetWorkspaceProp = {
 
 export async function getWorkspace({ workspaceId }: GetWorkspaceProp) {
   try {
-    const client = new Client()
-      .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
-      .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT!);
-
-    const session = cookies().get(AUTH_COOKIE);
-
-    if (!session) {
-      return null;
-    }
-
-    client.setSession(session.value);
-
-    const account = new Account(client);
-    const database = new Databases(client);
+    const { account, databases } = await createSessionClient();
 
     const user = await account.get();
 
     const member = getMember({
-      databases: database,
+      databases,
       userId: user.$id,
       workspaceId,
     });
@@ -83,7 +56,7 @@ export async function getWorkspace({ workspaceId }: GetWorkspaceProp) {
       return null;
     }
 
-    const workspace = await database.getDocument<WorkspaceType>(
+    const workspace = await databases.getDocument<WorkspaceType>(
       DATABASE_ID,
       WORKSPACES_ID,
       workspaceId
