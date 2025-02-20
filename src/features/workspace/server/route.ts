@@ -161,8 +161,6 @@ const app = new Hono()
       userId: user.$id,
     });
 
-    console.log("member", member);
-
     if (!member || member.role !== MemberRole.ADMIN) {
       return c.json({ error: "Unauthorized" }, 401);
     }

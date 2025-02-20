@@ -141,9 +141,14 @@ const app = new Hono()
         return c.json({ error: "Unauthorized" }, 401);
       }
 
-      await databases.updateDocument(DATABASE_ID, MEMBERS_ID, member.$id, {
-        role,
-      });
+      await databases.updateDocument(
+        DATABASE_ID,
+        MEMBERS_ID,
+        memberToUpdate.$id,
+        {
+          role,
+        }
+      );
 
       return c.json({ data: { $id: member.$id } });
     }
