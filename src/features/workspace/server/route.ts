@@ -165,13 +165,9 @@ const app = new Hono()
       return c.json({ error: "Unauthorized" }, 401);
     }
 
-    const workspace = await databases.deleteDocument(
-      DATABASE_ID,
-      WORKSPACES_ID,
-      workspaceId
-    );
+    await databases.deleteDocument(DATABASE_ID, WORKSPACES_ID, workspaceId);
 
-    return c.json({ data: { $id: workspace } });
+    return c.json({ data: { $id: workspaceId } });
   })
   .patch("/:workspaceId/reset-invite-code", sessionMiddleware, async (c) => {
     const { workspaceId } = c.req.param();
@@ -239,4 +235,5 @@ const app = new Hono()
       return c.json({ data: workspace });
     }
   );
+
 export default app;

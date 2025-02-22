@@ -8,7 +8,8 @@ import { DATABASE_ID, IMAGES_BUCKET_ID, PROJECTS_ID } from "@/config";
 
 import { getMember } from "@/features/member/utils";
 
-import { createProjectSchema } from "../schemas";
+import { ProjectType } from "../types";
+import { createProjectSchema, updateProjectSchema } from "../schemas";
 
 const app = new Hono()
   .get(
@@ -44,7 +45,7 @@ const app = new Hono()
     }
   )
   .post(
-    "",
+    "/",
     sessionMiddleware,
     zValidator("form", createProjectSchema),
     async (c) => {
@@ -96,6 +97,94 @@ const app = new Hono()
 
       return c.json({ data: project });
     }
-  );
+  )
+  .patch(
+    "/:projectId",
+    sessionMiddleware,
+    zValidator("form", updateProjectSchema),
+    async (c) => {
+      const { projectId } = c.req.param();
+      const { name, image } = c.req.valid("form");
+
+      const databases = c.get("databases");
+      const user = c.get("user");
+
+      const storage = c.get("storage");
+
+      const projectToUpdate = await databases.getDocument<ProjectType>(
+        DATABASE_ID,
+        PROJECTS_ID,
+        projectId
+      );
+
+      const member = await getMember({
+        databases,
+        userId: user?.$id,
+        workspaceId: projectToUpdate.workspaceId,
+      });
+
+      if (!member) {
+        return c.json({ error: "Unauthorized" }, 401);
+      }
+
+      let uploadedImageUrl;
+
+      if (image instanceof File) {
+        const file = await storage.createFile(
+          IMAGES_BUCKET_ID,
+          ID.unique(),
+          image
+        );
+
+        const imagePreview = await storage.getFilePreview(
+          IMAGES_BUCKET_ID,
+          file.$id
+        );
+
+        uploadedImageUrl = `data:image/png;base64,${Buffer.from(
+          imagePreview
+        ).toString("base64")}`;
+      } else {
+        uploadedImageUrl = image;
+      }
+
+      const project = await databases.updateDocument(
+        DATABASE_ID,
+        PROJECTS_ID,
+        projectId,
+        {
+          name,
+          image: uploadedImageUrl ?? "",
+        }
+      );
+
+      return c.json({ data: project });
+    }
+  )
+  .delete("/:projectId", sessionMiddleware, async (c) => {
+    const { projectId } = c.req.param();
+    const user = c.get("user");
+    const databases = c.get("databases");
+
+    const projectToDelete = await databases.getDocument<ProjectType>(
+      DATABASE_ID,
+      PROJECTS_ID,
+      projectId
+    );
+
+    const member = await getMember({
+      databases,
+      userId: user.$id,
+      workspaceId: projectToDelete.workspaceId,
+    });
+
+    if (!member) {
+      return c.json({ error: "Unauthorized" }, 401);
+    }
+
+    await databases.deleteDocument(DATABASE_ID, PROJECTS_ID, projectId);
+
+    return c.json({ data: { $id: projectToDelete.$id } });
+  });
 
 export default app;
