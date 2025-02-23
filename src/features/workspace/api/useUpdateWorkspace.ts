@@ -36,11 +36,12 @@ export function useUpdateWorkspace() {
     onSuccess: async ({ data }) => {
       toast.success("Workspace updated");
 
-      router.push(`/workspaces/${data.$id}`);
       await queryClient.invalidateQueries({ queryKey: ["workspaces"] });
       await queryClient.invalidateQueries({
         queryKey: ["workspace", data.$id],
       });
+
+      router.refresh();
     },
   });
 

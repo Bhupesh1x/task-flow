@@ -1,4 +1,5 @@
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 import { InferRequestType, InferResponseType } from "hono";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -13,6 +14,7 @@ type RequestType = InferRequestType<
 >["form"];
 
 export function useCreateProject() {
+  const router = useRouter();
   const queryClient = useQueryClient();
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
@@ -28,9 +30,10 @@ export function useCreateProject() {
     onError: (error: Error) => {
       toast.error(error?.message || "Internal server error");
     },
-    onSuccess: async () => {
+    onSuccess: async ({ data }) => {
       toast.success("Project created");
       await queryClient.invalidateQueries({ queryKey: ["projects"] });
+      router.push(`/workspaces/${data.workspaceId}/projects/${data.$id}`);
     },
   });
 
