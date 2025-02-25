@@ -5,8 +5,11 @@ import { PlusIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DottedSeprator } from "@/components/DottedSeprator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useCreateTaskModal } from "../hooks/useCreateTaskModal";
 
 export function TaskSwitcher() {
+  const { open } = useCreateTaskModal();
+
   return (
     <div className="mt-4">
       <Tabs className="border w-full rounded-lg">
@@ -23,7 +26,7 @@ export function TaskSwitcher() {
                 Calender
               </TabsTrigger>
             </TabsList>
-            <Button className="w-full lg:w-auto" size="sm">
+            <Button className="w-full lg:w-auto" size="sm" onClick={open}>
               <PlusIcon className="size-4" />
               New
             </Button>
