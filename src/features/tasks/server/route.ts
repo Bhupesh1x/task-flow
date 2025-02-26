@@ -94,7 +94,7 @@ const app = new Hono()
 
       const assignees = await Promise.all(
         members.documents?.map(async (member) => {
-          const user = await users.get(member.$id);
+          const user = await users.get(member.userId);
 
           return {
             ...member,
@@ -120,7 +120,7 @@ const app = new Hono()
         };
       });
 
-      return c.json({ data: { ...tasks, populatedTasks } });
+      return c.json({ data: { ...tasks, documents: populatedTasks } });
     }
   )
   .post("/", sessionMiddleware, zValidator("json", taskSchema), async (c) => {
