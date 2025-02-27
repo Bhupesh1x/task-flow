@@ -6,6 +6,7 @@ import { Loader2, PlusIcon } from "lucide-react";
 import { useWorkspaceId } from "@/features/workspace/hooks/useWorkspaceId";
 
 import { Button } from "@/components/ui/button";
+import { DataTable } from "@/components/DataTable";
 import { DottedSeprator } from "@/components/DottedSeprator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -14,6 +15,7 @@ import { useGetTasks } from "../api/useGetTasks";
 import { useTaskFilters } from "../hooks/useTaskFilters";
 import { useCreateTaskModal } from "../hooks/useCreateTaskModal";
 
+import { taskColumns } from "./columns";
 import { DataFilter } from "./DataFilter";
 
 export function TaskSwitcher() {
@@ -71,7 +73,10 @@ export function TaskSwitcher() {
           ) : (
             <div className="overflow-auto">
               <TabsContent value="table" className="mt-0">
-                {JSON.stringify(tasks)}
+                <DataTable
+                  data={tasks?.documents || []}
+                  columns={taskColumns}
+                />
               </TabsContent>
               <TabsContent value="kanban" className="mt-0">
                 {JSON.stringify(tasks)}
