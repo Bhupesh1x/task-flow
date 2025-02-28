@@ -5,6 +5,7 @@ import { useConfirm } from "@/hooks/useConfirm";
 
 import { useDeleteTask } from "@/features/tasks/api/useDeleteTask";
 import { useWorkspaceId } from "@/features/workspace/hooks/useWorkspaceId";
+import { useUpdateTaskModal } from "@/features/tasks/hooks/useUpdateTaskModal";
 
 import {
   DropdownMenu,
@@ -24,6 +25,8 @@ export function TaskActions({ id, projectId, children }: Props) {
   const { mutate: deleteTask, isPending: isDeletingPending } = useDeleteTask();
 
   const router = useRouter();
+
+  const { open } = useUpdateTaskModal();
 
   const [DeleteTaskDialog, onConfirm] = useConfirm(
     "Delete task?",
@@ -67,7 +70,10 @@ export function TaskActions({ id, projectId, children }: Props) {
             <ExternalLinkIcon className="size-4 mr-2" />
             Open Project
           </DropdownMenuItem>
-          <DropdownMenuItem className="font-medium p-[10px]">
+          <DropdownMenuItem
+            className="font-medium p-[10px]"
+            onClick={() => open(id)}
+          >
             <Pencil className="size-4 mr-2" />
             Edit Task
           </DropdownMenuItem>

@@ -158,7 +158,7 @@ const app = new Hono()
 
     const member = await databases.getDocument(
       DATABASE_ID,
-      PROJECTS_ID,
+      MEMBERS_ID,
       task.assigneeId
     );
 
@@ -295,10 +295,10 @@ const app = new Hono()
         return c.json({ error: "Unauthorized" }, 401);
       }
 
-      const task = await databases.createDocument(
+      const task = await databases.updateDocument(
         DATABASE_ID,
         TASKS_ID,
-        ID.unique(),
+        taskId,
         {
           name,
           status,

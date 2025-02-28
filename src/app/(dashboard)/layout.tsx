@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/Navbar";
 import { Sidebar } from "@/components/Sidebar";
 
+import { UpdateTaskModal } from "@/features/tasks/components/UpdateTaskModal";
 import { CreatetaskModal } from "@/features/tasks/components/CreateTaskModal";
 import { CreateProjectModal } from "@/features/projects/components/CreateProjectModal";
 import { CreateWorkspaceModal } from "@/features/workspace/components/CreateWorkspaceModal";
@@ -15,6 +16,7 @@ function Dashboardlayout({ children }: Props) {
       <CreateWorkspaceModal />
       <CreateProjectModal />
       <CreatetaskModal />
+      <UpdateTaskModal />
 
       <div className="flex h-full w-full">
         <div className="h-full hidden lg:block lg:w-[264px] fixed left-0 top-0 overflow-y-auto">

@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { MemberAvatar } from "@/features/member/components/MemberAvatar";
-import { useWorkspaceId } from "@/features/workspace/hooks/useWorkspaceId";
 import { ProjectAvatar } from "@/features/projects/components/ProjectAvatar";
 
 import {
@@ -29,37 +28,41 @@ import { DatePicker } from "@/components/ui/date-picker";
 import { DottedSeprator } from "@/components/DottedSeprator";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-import { TaskStatus } from "../types";
+import { Task, TaskStatus } from "../types";
 import { taskSchema } from "../schemas";
 
-import { useCreateTask } from "../api/useCreateTask";
+import { useUpdateTask } from "../api/useUpdateTask";
 
 type Props = {
   projectOptions: { id: string; name: string; imageUrl: string }[];
   memberOptions: { id: string; name: string }[];
-
   onCancel?: () => void;
+  initialValues: Task;
 };
 
-export const CreateTaskForm = ({
+export const UpdateTaskForm = ({
   onCancel,
   memberOptions,
   projectOptions,
+  initialValues,
 }: Props) => {
-  const workspaceId = useWorkspaceId();
-
   const form = useForm<z.infer<typeof taskSchema>>({
-    resolver: zodResolver(taskSchema.omit({ workspaceId: true })),
+    resolver: zodResolver(
+      taskSchema.omit({ workspaceId: true, description: true })
+    ),
     defaultValues: {
-      name: "",
+      ...initialValues,
+      dueDate: initialValues.dueDate
+        ? new Date(initialValues.dueDate)
+        : undefined,
     },
   });
 
-  const { mutate, isPending } = useCreateTask();
+  const { mutate, isPending } = useUpdateTask();
 
   function onSubmit(values: z.infer<typeof taskSchema>) {
     mutate(
-      { ...values, workspaceId },
+      { json: values, param: { taskId: initialValues.$id } },
       {
         onSuccess: () => {
           form.reset();
@@ -72,7 +75,7 @@ export const CreateTaskForm = ({
   return (
     <Card className="h-full w-full border-none shadow-none">
       <CardHeader className="flex p-7">
-        <CardTitle className="text-xl font-bold">Create a new task</CardTitle>
+        <CardTitle className="text-xl font-bold">Edit task</CardTitle>
       </CardHeader>
       <div className="px-7">
         <DottedSeprator />
@@ -231,7 +234,7 @@ export const CreateTaskForm = ({
                 Cancel
               </Button>
               <Button type="submit" disabled={isPending} size="lg">
-                Create Task
+                Save Changes
               </Button>
             </div>
           </form>

@@ -3,19 +3,21 @@
 import { useMemo } from "react";
 import { Loader2 } from "lucide-react";
 
+import { useGetTask } from "@/features/tasks/api/useGetTask";
 import { useGetMembers } from "@/features/member/api/useGetMembers";
 import { useGetProjects } from "@/features/projects/api/useGetProjects";
 import { useWorkspaceId } from "@/features/workspace/hooks/useWorkspaceId";
 
 import { Card, CardContent } from "@/components/ui/card";
 
-import { CreateTaskForm } from "./CreateTaskForm";
+import { UpdateTaskForm } from "./UpdateTaskForm";
 
 type Props = {
   onCancel?: () => void;
+  taskId: string;
 };
 
-export function CreateTaskFormWrapper({ onCancel }: Props) {
+export function UpdateTaskFormWrapper({ taskId, onCancel }: Props) {
   const workspaceId = useWorkspaceId();
 
   const { data: projects, isLoading: isProjectsLoading } = useGetProjects({
@@ -25,7 +27,14 @@ export function CreateTaskFormWrapper({ onCancel }: Props) {
     workspaceId,
   });
 
-  const isLoading = isProjectsLoading || isMembersLoading;
+  const { data: initialValues, isLoading: isInitialValuesLoading } = useGetTask(
+    {
+      taskId,
+    }
+  );
+
+  const isLoading =
+    isProjectsLoading || isMembersLoading || isInitialValuesLoading;
 
   const projectOptions = useMemo(() => {
     if (!projects?.total) return [];
@@ -56,12 +65,17 @@ export function CreateTaskFormWrapper({ onCancel }: Props) {
     );
   }
 
+  if (!initialValues) {
+    return null;
+  }
+
   return (
     <div>
-      <CreateTaskForm
+      <UpdateTaskForm
         onCancel={onCancel}
         projectOptions={projectOptions}
         memberOptions={memberOptions}
+        initialValues={initialValues}
       />
     </div>
   );
