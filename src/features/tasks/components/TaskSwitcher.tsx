@@ -12,6 +12,7 @@ import { DottedSeprator } from "@/components/DottedSeprator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { useGetTasks } from "../api/useGetTasks";
+import { useBulkUpdateTasks } from "../api/useBulkUpdateTasks";
 
 import { useTaskFilters } from "../hooks/useTaskFilters";
 import { useCreateTaskModal } from "../hooks/useCreateTaskModal";
@@ -41,11 +42,13 @@ export function TaskSwitcher() {
     status,
   });
 
+  const { mutate: bulkUpdate } = useBulkUpdateTasks();
+
   const onKanbanChange = useCallback(
     (tasks: { $id: string; position: number; status: TaskStatus }[]) => {
-      console.log({ tasks });
+      bulkUpdate({ json: { tasks } });
     },
-    []
+    [bulkUpdate]
   );
 
   return (
