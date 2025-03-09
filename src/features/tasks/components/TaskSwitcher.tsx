@@ -22,6 +22,7 @@ import { taskColumns } from "./columns";
 
 import { DataKanban } from "./DataKanban";
 import { DataFilter } from "./DataFilter";
+import { DataCalender } from "./DataCalender";
 
 export function TaskSwitcher() {
   const workspaceId = useWorkspaceId();
@@ -99,7 +100,7 @@ export function TaskSwitcher() {
                 />
               </TabsContent>
               <TabsContent value="calender" className="mt-0">
-                {JSON.stringify(tasks)}
+                <DataCalender data={tasks?.documents || []} />
               </TabsContent>
             </div>
           )}
