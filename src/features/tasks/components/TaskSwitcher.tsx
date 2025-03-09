@@ -24,7 +24,11 @@ import { DataKanban } from "./DataKanban";
 import { DataFilter } from "./DataFilter";
 import { DataCalender } from "./DataCalender";
 
-export function TaskSwitcher() {
+type Props = {
+  hideProjectFilter?: boolean;
+};
+
+export function TaskSwitcher({ hideProjectFilter }: Props) {
   const workspaceId = useWorkspaceId();
   const { open } = useCreateTaskModal();
 
@@ -79,7 +83,7 @@ export function TaskSwitcher() {
           </div>
 
           <DottedSeprator className="py-4" />
-          <DataFilter />
+          <DataFilter hideProjectFilter={hideProjectFilter} />
           <DottedSeprator className="py-4" />
           {isTasksLoading ? (
             <div className="h-[200px] w-full flex items-center justify-center border rounded-lg">
