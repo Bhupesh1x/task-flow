@@ -47,7 +47,7 @@ export function TaskActions({ id, projectId, children }: Props) {
   }
 
   function onTaskDetails() {
-    router.push(`/workspaces/${workspaceId}/projects/${projectId}/tasks/${id}`);
+    router.push(`/workspaces/${workspaceId}/tasks/${id}`);
   }
 
   return (

@@ -15,7 +15,11 @@ type RequestType = InferRequestType<
 export function useDeleteTask() {
   const queryClient = useQueryClient();
 
-  const mutation = useMutation<ResponseType, Error, RequestType>({
+  const mutation = useMutation<
+    ResponseType,
+    Error,
+    RequestType & { onSuccess?: (data?: ResponseType) => void }
+  >({
     mutationFn: async ({ param }) => {
       const response = await client.api.tasks[":taskId"]["$delete"]({
         param,
@@ -30,8 +34,13 @@ export function useDeleteTask() {
     onError: (error: Error) => {
       toast.error(error?.message || "Internal server error");
     },
-    onSuccess: async ({ data }) => {
+    onSuccess: async ({ data }, variables) => {
       toast.success("Task deleted");
+
+      // Call the onSuccess passed inside `mutate()`
+      if (variables?.onSuccess) {
+        variables.onSuccess({ data });
+      }
 
       await queryClient.invalidateQueries({ queryKey: ["tasks"] });
       await queryClient.invalidateQueries({
