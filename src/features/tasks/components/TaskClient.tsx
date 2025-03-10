@@ -7,6 +7,9 @@ import { useGetTask } from "@/features/tasks/api/useGetTask";
 import { TaskBreadCrumb } from "@/features/tasks/components/TaskBreadCrumb";
 
 import { PageLoader } from "@/components/PageLoader";
+import { DottedSeprator } from "@/components/DottedSeprator";
+
+import { TaskOverview } from "./TaskOverview";
 
 type Props = {
   taskId: string;
@@ -27,6 +30,11 @@ export function TaskClient({ taskId, workspaceId }: Props) {
   return (
     <div className="flex flex-col">
       <TaskBreadCrumb task={task as Task} />
+      <DottedSeprator className="my-6" />
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <TaskOverview task={task as Task} />
+      </div>
     </div>
   );
 }
