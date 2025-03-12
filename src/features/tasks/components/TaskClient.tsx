@@ -10,6 +10,7 @@ import { PageLoader } from "@/components/PageLoader";
 import { DottedSeprator } from "@/components/DottedSeprator";
 
 import { TaskOverview } from "./TaskOverview";
+import { TaskDescription } from "./TaskDescription";
 
 type Props = {
   taskId: string;
@@ -32,8 +33,9 @@ export function TaskClient({ taskId, workspaceId }: Props) {
       <TaskBreadCrumb task={task as Task} />
       <DottedSeprator className="my-6" />
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
         <TaskOverview task={task as Task} />
+        <TaskDescription task={task as Task} />
       </div>
     </div>
   );
