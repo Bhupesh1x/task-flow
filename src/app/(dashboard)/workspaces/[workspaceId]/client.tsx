@@ -6,6 +6,8 @@ import { useGetWorkspaceAnalytics } from "@/features/workspace/api/useGetWorkspa
 
 import { Analytics } from "@/components/Analytics";
 import { PageLoader } from "@/components/PageLoader";
+import { ProjectList } from "@/features/projects/components/ProjectList";
+import { HomePageMemberList } from "@/features/member/components/HomePageMemberList";
 
 type Props = {
   workspaceId: string;
@@ -39,6 +41,16 @@ export function WorkspacePageClient({ workspaceId }: Props) {
   return (
     <div className="h-full flex flex-col space-y-4">
       {workspaceAnalytics ? <Analytics data={workspaceAnalytics} /> : null}
+      <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <ProjectList
+          projects={projects?.documents ?? []}
+          total={projects?.total ?? 0}
+        />
+        <HomePageMemberList
+          members={members?.documents ?? []}
+          total={members?.total ?? 0}
+        />
+      </div>
     </div>
   );
 }

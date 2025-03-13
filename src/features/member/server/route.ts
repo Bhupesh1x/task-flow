@@ -8,7 +8,7 @@ import { createAdminClient } from "@/lib/appwrite";
 import { sessionMiddleware } from "@/lib/sessionMiddleware";
 
 import { getMember } from "../utils";
-import { MemberRole } from "../types";
+import { MemberRole, MemberType } from "../types";
 
 const app = new Hono()
   .get(
@@ -32,9 +32,11 @@ const app = new Hono()
         return c.json({ error: "Unauthorized" }, 401);
       }
 
-      const members = await databases.listDocuments(DATABASE_ID, MEMBERS_ID, [
-        Query.equal("workspaceId", member.workspaceId),
-      ]);
+      const members = await databases.listDocuments<MemberType>(
+        DATABASE_ID,
+        MEMBERS_ID,
+        [Query.equal("workspaceId", member.workspaceId)]
+      );
 
       const populatedMembers = await Promise.all(
         members.documents.map(async (member) => {
