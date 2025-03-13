@@ -75,7 +75,7 @@ export function TaskDescription({ task }: Props) {
           {task?.description ? (
             <p>{task.description}</p>
           ) : (
-            <span className="text-sm text-muted-foreground">
+            <span className="text-muted-foreground">
               No description set yet
             </span>
           )}
