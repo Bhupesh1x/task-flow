@@ -45,7 +45,11 @@ async function ProjectIdPage({ params }: Props) {
           </Link>
         </Button>
       </div>
-      <TaskSwitcher hideProjectFilter analyticsProjectId={params.projectId} />
+      <TaskSwitcher
+        hideProjectFilter
+        analyticsProjectId={params.projectId}
+        paramProjectId={params.projectId}
+      />
     </>
   );
 }

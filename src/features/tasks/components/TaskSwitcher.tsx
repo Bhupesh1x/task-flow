@@ -29,9 +29,14 @@ import { DataCalender } from "./DataCalender";
 type Props = {
   hideProjectFilter?: boolean;
   analyticsProjectId?: string;
+  paramProjectId?: string;
 };
 
-export function TaskSwitcher({ hideProjectFilter, analyticsProjectId }: Props) {
+export function TaskSwitcher({
+  hideProjectFilter,
+  analyticsProjectId,
+  paramProjectId,
+}: Props) {
   const workspaceId = useWorkspaceId();
   const { open } = useCreateTaskModal();
 
@@ -44,7 +49,7 @@ export function TaskSwitcher({ hideProjectFilter, analyticsProjectId }: Props) {
   const { data: tasks, isLoading: isTasksLoading } = useGetTasks({
     workspaceId,
     assigneeId,
-    projectId,
+    projectId: paramProjectId ?? projectId,
     dueDate,
     search,
     status,
