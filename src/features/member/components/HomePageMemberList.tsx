@@ -39,10 +39,16 @@ export function HomePageMemberList({ members, total }: Props) {
               <CardContent className="p-2 flex flex-col items-center gap-x-1.5">
                 <MemberAvatar name={member.name} className="!size-12" />
                 <div className="flex flex-col items-center overflow-hidden">
-                  <p className="text-lg font-medium line-clamp-1">
+                  <p
+                    className="text-lg font-medium line-clamp-1"
+                    title={member?.name}
+                  >
                     {member?.name}
                   </p>
-                  <p className="text-sm text-muted-foreground">
+                  <p
+                    className="text-sm text-muted-foreground line-clamp-1"
+                    title={member?.email}
+                  >
                     {member?.email}
                   </p>
                 </div>
