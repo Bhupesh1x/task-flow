@@ -5,8 +5,10 @@ import { useQueryState } from "nuqs";
 import { Loader2, PlusIcon } from "lucide-react";
 
 import { useWorkspaceId } from "@/features/workspace/hooks/useWorkspaceId";
+import { useGetProjectAnalytics } from "@/features/projects/api/useGetProjectAnalytics";
 
 import { Button } from "@/components/ui/button";
+import { Analytics } from "@/components/Analytics";
 import { DataTable } from "@/components/DataTable";
 import { DottedSeprator } from "@/components/DottedSeprator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -26,9 +28,10 @@ import { DataCalender } from "./DataCalender";
 
 type Props = {
   hideProjectFilter?: boolean;
+  analyticsProjectId?: string;
 };
 
-export function TaskSwitcher({ hideProjectFilter }: Props) {
+export function TaskSwitcher({ hideProjectFilter, analyticsProjectId }: Props) {
   const workspaceId = useWorkspaceId();
   const { open } = useCreateTaskModal();
 
@@ -47,6 +50,10 @@ export function TaskSwitcher({ hideProjectFilter }: Props) {
     status,
   });
 
+  const { data: projectAnalytics, isLoading } = useGetProjectAnalytics({
+    projectId: analyticsProjectId as string,
+  });
+
   const { mutate: bulkUpdate } = useBulkUpdateTasks();
 
   const onKanbanChange = useCallback(
@@ -56,8 +63,22 @@ export function TaskSwitcher({ hideProjectFilter }: Props) {
     [bulkUpdate]
   );
 
+  if (isLoading) {
+    return (
+      <div className="h-[60vh] flex items-center justify-center">
+        <Loader2 className="text-muted-foreground animate-spin" />
+      </div>
+    );
+  }
+
   return (
     <div className="mt-4">
+      {projectAnalytics ? (
+        <div className="mb-4">
+          <Analytics data={projectAnalytics} />
+        </div>
+      ) : null}
+
       <Tabs
         className="border w-full rounded-lg"
         defaultValue={view}

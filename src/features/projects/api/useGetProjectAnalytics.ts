@@ -1,3 +1,4 @@
+import { InferResponseType } from "hono";
 import { useQuery } from "@tanstack/react-query";
 
 import { client } from "@/lib/rpc";
@@ -5,6 +6,11 @@ import { client } from "@/lib/rpc";
 type Props = {
   projectId: string;
 };
+
+export type ProjectAnalyticsType = InferResponseType<
+  (typeof client.api.projects)[":projectId"]["analytics"]["$get"],
+  200
+>["data"];
 
 export function useGetProjectAnalytics({ projectId }: Props) {
   const query = useQuery({
@@ -24,6 +30,7 @@ export function useGetProjectAnalytics({ projectId }: Props) {
 
       return data;
     },
+    enabled: !!projectId,
   });
 
   return query;
