@@ -63,7 +63,7 @@ export function TaskSwitcher({ hideProjectFilter, analyticsProjectId }: Props) {
     [bulkUpdate]
   );
 
-  if (isLoading) {
+  if (analyticsProjectId && isLoading) {
     return (
       <div className="h-[60vh] flex items-center justify-center">
         <Loader2 className="text-muted-foreground animate-spin" />
@@ -73,7 +73,7 @@ export function TaskSwitcher({ hideProjectFilter, analyticsProjectId }: Props) {
 
   return (
     <div className="mt-4">
-      {projectAnalytics ? (
+      {analyticsProjectId && projectAnalytics ? (
         <div className="mb-4">
           <Analytics data={projectAnalytics} />
         </div>
