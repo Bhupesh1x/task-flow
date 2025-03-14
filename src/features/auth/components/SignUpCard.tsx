@@ -7,6 +7,8 @@ import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { signUpWithGithub, signUpWithGoogle } from "@/lib/oauth";
+
 import {
   Form,
   FormControl,
@@ -130,6 +132,7 @@ export function SignUpCard() {
           size="lg"
           variant="secondary"
           className="w-full"
+          onClick={() => signUpWithGoogle()}
         >
           <FcGoogle className="mr-2 size-5" />
           Sign up with google
@@ -139,6 +142,7 @@ export function SignUpCard() {
           size="lg"
           variant="secondary"
           className="w-full"
+          onClick={() => signUpWithGithub()}
         >
           <FaGithub className="mr-2 size-5" />
           Sign up with github
