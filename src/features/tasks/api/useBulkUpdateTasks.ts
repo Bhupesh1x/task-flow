@@ -34,6 +34,10 @@ export function useBulkUpdateTasks() {
       toast.success("Tasks updated");
 
       await queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      await queryClient.invalidateQueries({
+        queryKey: ["workspace-analytics"],
+      });
+      await queryClient.invalidateQueries({ queryKey: ["project-analytics"] });
     },
   });
 

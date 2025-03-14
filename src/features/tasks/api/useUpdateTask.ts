@@ -36,6 +36,10 @@ export function useUpdateTask() {
 
       await queryClient.invalidateQueries({ queryKey: ["tasks"] });
       await queryClient.invalidateQueries({
+        queryKey: ["workspace-analytics"],
+      });
+      await queryClient.invalidateQueries({ queryKey: ["project-analytics"] });
+      await queryClient.invalidateQueries({
         queryKey: ["task", data.$id],
       });
     },

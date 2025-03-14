@@ -4,13 +4,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { client } from "@/lib/rpc";
 
-type ResponseType = InferResponseType<
-  (typeof client.api.tasks)["$post"],
-  200
->;
-type RequestType = InferRequestType<
-  (typeof client.api.tasks)["$post"]
->["json"];
+type ResponseType = InferResponseType<(typeof client.api.tasks)["$post"], 200>;
+type RequestType = InferRequestType<(typeof client.api.tasks)["$post"]>["json"];
 
 export function useCreateTask() {
   const queryClient = useQueryClient();
@@ -31,6 +26,10 @@ export function useCreateTask() {
     onSuccess: async () => {
       toast.success("Task created");
       await queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      await queryClient.invalidateQueries({
+        queryKey: ["workspace-analytics"],
+      });
+      await queryClient.invalidateQueries({ queryKey: ["project-analytics"] });
     },
   });
 
