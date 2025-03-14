@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Project Title
 
-## Getting Started
+This project is a task management system where users can authenticate, create and manage workspaces, projects, and tasks, and gain insights into their progress through different views and analytics. Built with modern web technologies to provide an intuitive and efficient user experience.
 
-First, run the development server:
+## Tech Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Next.js**, **React.js**, **Tailwind CSS**, **Hono**, **React-Query**, **Appwrite**
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Authentication**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+   - Users can register, log in, and manage their sessions.
+   - Provides user authentication and secure login/logout features.
 
-## Learn More
+2. **Workspace Management**
 
-To learn more about Next.js, take a look at the following resources:
+   - Users can create, update, and delete workspaces.
+   - Create multiple workspaces according to their needs.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. **Project Management**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   - Users can create, update, and delete projects within each workspace.
+   - Add multiple projects to each workspace.
 
-## Deploy on Vercel
+4. **Task Management**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   - Users can create, manage, edit, and delete tasks within each project.
+   - Tasks can be organized with status, due date, and other relevant attributes.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+5. **Task Sorting & Filtering**
+
+   - Users can filter and sort tasks based on various criteria such as due date, status, and assigned user.
+
+6. **Task Views**
+
+   - Users can view tasks in different layouts:
+     - **Table View** for a structured overview.
+     - **Kanban View** for visual task tracking.
+     - **Calendar View** to track tasks over time.
+
+7. **Analytics**
+
+   - Users can view analytics on the homepage and specific project pages for enhanced insights and decision-making.
+
+8. **Member Management**
+   - Users can manage team members within a workspace.
+   - Change user roles and access levels for better collaboration.
