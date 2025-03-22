@@ -46,3 +46,9 @@ This project is a task management system where users can authenticate, create an
 8. **Member Management**
    - Users can manage team members within a workspace.
    - Change user roles and access levels for better collaboration.
+
+## Video Demo
+
+https://github.com/user-attachments/assets/e507ea4e-a0f3-4dff-b7b7-233f1e849904
+
+
