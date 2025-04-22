@@ -333,8 +333,6 @@ const app = new Hono()
 
       const { tasks } = c.req.valid("json");
 
-      console.log("tasks", tasks);
-
       const tasksToUpdate = await databases.listDocuments<Task>(
         DATABASE_ID,
         TASKS_ID,

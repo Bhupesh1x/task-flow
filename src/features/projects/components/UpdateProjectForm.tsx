@@ -63,8 +63,6 @@ export const UpdateProjectForm = ({ onCancel, initialValues }: Props) => {
       image: values.image || "",
     };
 
-    console.log("finalValues", finalValues);
-
     mutate({ form: finalValues, param: { projectId: initialValues.$id } });
   }
 
