@@ -1,6 +1,6 @@
-# Project Title
+# Task Flow
 
-This project is a task management system where users can authenticate, create and manage workspaces, projects, and tasks, and gain insights into their progress through different views and analytics. Built with modern web technologies to provide an intuitive and efficient user experience.
+Task Flow is a task management system where users can authenticate, create and manage workspaces, projects, and tasks, and gain insights into their progress through different views and analytics. Built with modern web technologies to provide an intuitive and efficient user experience.
 
 ## Tech Stack
 
@@ -47,8 +47,38 @@ This project is a task management system where users can authenticate, create an
    - Users can manage team members within a workspace.
    - Change user roles and access levels for better collaboration.
 
+## 📸 Project Key Screenshots
+
+> **Home Page**
+
+<img src="https://res.cloudinary.com/doqvdfvrj/image/upload/v1754067560/next-task-flow.vercel.app_homepage_qlpkoi.png" alt="Browse Screen" />
+<br />
+
+> **Task View (Table)**
+
+<img src="https://res.cloudinary.com/doqvdfvrj/image/upload/v1754067560/next-task-flow.vercel.app_task_view_v5yfjb.png" alt="Browse Screen" />
+<br />
+
+> **Task View (Kanban)**
+
+<img src="https://res.cloudinary.com/doqvdfvrj/image/upload/v1754067560/next-task-flow.vercel.app_task_kanban_view_vvcaid.png" alt="Browse Screen" />
+<br />
+
+> **Individual Project Screen**
+
+<img src="https://res.cloudinary.com/doqvdfvrj/image/upload/v1754067560/next-task-flow.vercel.app_project_view_ffadce.png" alt="Browse Screen" />
+<br />
+
+> **Settings Screen**
+
+<img src="https://res.cloudinary.com/doqvdfvrj/image/upload/v1754067559/next-task-flow.vercel.app_settings_affai6.png" alt="Browse Screen" />
+<br />
+
+> **Members Management Screen**
+
+<img src="https://res.cloudinary.com/doqvdfvrj/image/upload/v1754067559/next-task-flow.vercel.app_member_settings_qsexff.png" alt="Browse Screen" />
+<br />
+
 ## Video Demo
 
 https://github.com/user-attachments/assets/e507ea4e-a0f3-4dff-b7b7-233f1e849904
-
-
